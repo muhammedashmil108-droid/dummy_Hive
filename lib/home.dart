@@ -21,12 +21,11 @@ class _HomeState extends State<Home> {
   final  ageController =
       TextEditingController();
 
-  @override
-  void dispose() {
-    usernameController.dispose();
-    ageController.dispose();
-    super.dispose();
-  }
+     
+   
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -81,10 +80,20 @@ class _HomeState extends State<Home> {
               height: 50,
               child: ElevatedButton(
                 onPressed: ()async {
-          Student student=Student(name: usernameController.text, age: int.tryParse(ageController.text) ?? 0);
+                  if(usernameController.text.isEmpty ||
+                  ageController.text.isEmpty
+                  ){
+                    return;
+                  }
 
+                  
+          Student student=Student(name: usernameController.text, age: int.tryParse(ageController.text) ?? 0);
+          
+      
           await studentBox.add(student);
-         
+          usernameController.clear();
+          ageController.clear();
+        
                 },
                 child: Text(
                   'Submit',
