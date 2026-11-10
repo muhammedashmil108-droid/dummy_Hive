@@ -110,6 +110,9 @@ class _HomeState extends State<Home> {
               child: ListTile(
                 title: Text(students.name ?? "null"),
                 subtitle: Text(students.age.toString()),
+                trailing: IconButton(onPressed: ()async{
+                  await studentBox.deleteAt(Index);
+                }, icon: Icon(Icons.delete,color: Colors.red,),)
               ),
             );
 
