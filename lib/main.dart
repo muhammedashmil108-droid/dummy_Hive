@@ -1,6 +1,13 @@
+import 'package:dummy/model/students_model.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'home.dart';
-void main(){
+void main()async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(StudentAdapter());
+  await Hive.openBox<Student>("List");
+
   runApp(Myapp());
 }
 class Myapp extends StatelessWidget {

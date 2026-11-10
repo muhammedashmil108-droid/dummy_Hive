@@ -1,5 +1,8 @@
 
+import 'package:dummy/model/students_model.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -9,45 +12,19 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+ 
+ final Box <Student>studentBox = Hive.box<Student>("List");
 
-  final TextEditingController usernameController =
+  final  usernameController =
       TextEditingController();
 
-  final TextEditingController ageController =
+  final  ageController =
       TextEditingController();
-
-  ValueNotifier<List<Map<String, dynamic>>> students =
-      ValueNotifier([]);
-
-  void addStudent() {
-
-    String username = usernameController.text.trim();
-    int? age = int.tryParse(ageController.text.trim());
-
-    if (username.isEmpty || age == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter valid details')),
-      );
-      return;
-    }
-
-    students.value = [
-      ...students.value,
-      {
-        'username': username,
-        'age': age,
-      }
-    ];
-
-    usernameController.clear();
-    ageController.clear();
-  }
 
   @override
   void dispose() {
     usernameController.dispose();
     ageController.dispose();
-    students.dispose();
     super.dispose();
   }
 
@@ -66,7 +43,7 @@ class _HomeState extends State<Home> {
       ),
 
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16),
 
         child: Column(
           children: [
@@ -76,7 +53,9 @@ class _HomeState extends State<Home> {
               controller: usernameController,
               decoration: InputDecoration(
                 labelText: 'Username',
+                hintText: 'Enter username',
                 border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.person),
               ),
             ),
 
@@ -88,59 +67,58 @@ class _HomeState extends State<Home> {
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Age',
+                hintText: 'Enter age',
                 border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.calendar_today),
               ),
             ),
 
             SizedBox(height: 20),
 
             // Submit Button
-            ElevatedButton(
-              onPressed: addStudent,
-              child: Text(
-                'Submit',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: ()async {
+          Student student=Student(name: usernameController.text, age: int.tryParse(ageController.text) ?? 0);
 
-            SizedBox(height: 30),
-
-            // ValueListenableBuilder
-            Expanded(
-              child: ValueListenableBuilder(
-                valueListenable: students,
-
-                builder: (context, studentList, child) {
-
-                  return ListView.builder(
-                    itemCount: studentList.length,
-
-                    itemBuilder: (context, index) {
-
-                      return Card(
-                        elevation: 4,
-
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            child: Text('${index + 1}'),
-                          ),
-
-                          title: Text(
-                            studentList[index]['username'],
-                          ),
-
-                          subtitle: Text(
-                            'Age: ${studentList[index]['age']}',
-                          ),
-
-                          trailing: Icon(Icons.person),
-                        ),
-                      );
-                    },
-                  );
+          await studentBox.add(student);
+         
                 },
+                child: Text(
+                  'Submit',
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
             ),
+
+            SizedBox(height: 35),
+
+
+      Expanded(child: ValueListenableBuilder(valueListenable: studentBox.listenable(),
+       builder: (context,box,child){
+        final student =box.values.toList();
+
+        return ListView.builder(
+          itemCount: student.length,
+          itemBuilder: (context,Index){
+            final students= student[Index];
+            return Card(
+              elevation: 4,
+
+              child: ListTile(
+                title: Text(students.name ?? "null"),
+                subtitle: Text(students.age.toString()),
+              ),
+            );
+
+          }
+          );
+       }
+       ))
+
+         
           ],
         ),
       ),
