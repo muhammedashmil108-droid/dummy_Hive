@@ -21,9 +21,6 @@ class _HomeState extends State<Home> {
   final  ageController =
       TextEditingController();
 
-     
-   
-
 
 
 
@@ -34,12 +31,12 @@ class _HomeState extends State<Home> {
         title: Text(
           'StudentApp',
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 25,
             fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
-      ),
+  ),
 
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -128,7 +125,8 @@ class _HomeState extends State<Home> {
           }
           );
        }
-       ))
+       ),
+       ),
 
          
           ],
