@@ -13,7 +13,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
  
- final Box <Student>studentBox = Hive.box<Student>("List");
+ late Box <Student>studentBox ;
 
   final  usernameController =
       TextEditingController();
@@ -21,7 +21,11 @@ class _HomeState extends State<Home> {
   final  ageController =
       TextEditingController();
 
-
+@override
+void initState(){
+  super.initState();
+  studentBox=Hive.box("List");
+}
 
 
   @override
