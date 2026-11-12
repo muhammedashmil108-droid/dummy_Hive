@@ -1,5 +1,4 @@
 
-
 import 'package:hive_flutter/hive_flutter.dart';
 part 'students_model.g.dart';
 
@@ -12,3 +11,6 @@ class Model extends HiveObject{
 
  Model({required this.name,required this.age});
 }
+
+
+

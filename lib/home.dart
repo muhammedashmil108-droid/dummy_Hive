@@ -15,7 +15,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
  
- final Box <Model>studentBox =Hive.box("List");
+ final Box <Model>studentBox =Hive.box<Model>("List");
  final studentService= Service();
 
   final  usernameController =
@@ -127,7 +127,8 @@ class _HomeState extends State<Home> {
                 subtitle: Text(students.age.toString()),
                 trailing: IconButton(onPressed: ()async{
                   await studentService.delete(Index);
-                }, icon: Icon(Icons.delete,color: Colors.red,),)
+                }, icon: Icon(Icons.delete,color: Colors.red,),
+                )
               ),
             );
 
