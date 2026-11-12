@@ -1,7 +1,9 @@
 
+
+
 import 'package:dummy/model/students_model.dart';
+import 'package:dummy/service/student_service.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class Home extends StatefulWidget {
@@ -13,7 +15,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
  
- late Box <Student>studentBox ;
+ final Box <Model>studentBox =Hive.box("List");
+ final studentService= Service();
 
   final  usernameController =
       TextEditingController();
@@ -21,11 +24,25 @@ class _HomeState extends State<Home> {
   final  ageController =
       TextEditingController();
 
-@override
-void initState(){
-  super.initState();
-  studentBox=Hive.box("List");
-}
+
+  void save() async{
+     if(usernameController.text.isEmpty ||
+                ageController.text.isEmpty
+                  ){
+                return;
+          }
+
+                  
+         Model student=Model(name: usernameController.text, age: int.tryParse(ageController.text) ?? 0);
+          
+      
+         await studentService.addModel(student);
+           usernameController.clear();
+          ageController.clear();
+        
+  }
+  
+
 
 
   @override
@@ -81,20 +98,8 @@ void initState(){
               height: 50,
               child: ElevatedButton(
                 onPressed: ()async {
-                  if(usernameController.text.isEmpty ||
-                  ageController.text.isEmpty
-                  ){
-                    return;
-                  }
-
-                  
-          Student student=Student(name: usernameController.text, age: int.tryParse(ageController.text) ?? 0);
-          
-      
-          await studentBox.add(student);
-          usernameController.clear();
-          ageController.clear();
-        
+         
+        save();
                 },
                 child: Text(
                   'Submit',
@@ -121,7 +126,7 @@ void initState(){
                 title: Text(students.name ?? "null"),
                 subtitle: Text(students.age.toString()),
                 trailing: IconButton(onPressed: ()async{
-                  await studentBox.deleteAt(Index);
+                  await studentService.delete(Index);
                 }, icon: Icon(Icons.delete,color: Colors.red,),)
               ),
             );

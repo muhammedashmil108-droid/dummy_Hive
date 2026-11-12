@@ -6,24 +6,24 @@ part of 'students_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class StudentAdapter extends TypeAdapter<Student> {
+class StudentAdapter extends TypeAdapter<Model> {
   @override
   final int typeId = 0;
 
   @override
-  Student read(BinaryReader reader) {
+  Model read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Student(
+    return Model(
       name: fields[0] as String?,
       age: fields[1] as int?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Student obj) {
+  void write(BinaryWriter writer, Model obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
