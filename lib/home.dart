@@ -115,7 +115,7 @@ class _HomeState extends State<Home> {
               ),
             ),
 
-            SizedBox(height: 35),
+            SizedBox(height: 34),
 
 
       Expanded(child: ValueListenableBuilder(valueListenable: studentBox.listenable(),
