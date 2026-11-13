@@ -120,7 +120,7 @@ class _HomeState extends State<Home> {
           itemBuilder: (context,Index){
             final students= student[Index];
             return Card(
-              elevation: 4,
+              elevation: 3,
 
               child: ListTile(
                 title: Text(students.name ?? "null"),
@@ -138,7 +138,7 @@ class _HomeState extends State<Home> {
        ),
        ),
 
-         
+        
           ],
         ),
       ),
