@@ -16,6 +16,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
  
  final Box <Model>studentBox =Hive.box<Model>("List");
+ int? editIndex;
  final studentService= Service();
 
   final  usernameController =
@@ -34,9 +35,15 @@ class _HomeState extends State<Home> {
 
                   
          Model student=Model(name: usernameController.text, age: int.tryParse(ageController.text) ?? 0);
+         if(editIndex ==null){
+          await studentService.addModel(student);
+         }else{
+          await studentService.update(editIndex!, student);
+          editIndex=null;
+         }
           
       
-         await studentService.addModel(student);
+        //  await studentService.addModel(student);
            usernameController.clear();
           ageController.clear();
         
@@ -117,18 +124,28 @@ class _HomeState extends State<Home> {
 
         return ListView.builder(
           itemCount: student.length,
-          itemBuilder: (context,Index){
-            final students= student[Index];
+          itemBuilder: (context,index){
+            final students= student[index];
             return Card(
               elevation: 3,
 
               child: ListTile(
                 title: Text(students.name ?? "null"),
                 subtitle: Text(students.age.toString()),
-                trailing: IconButton(onPressed: ()async{
-                  await studentService.delete(Index);
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(onPressed: (){
+                   usernameController.text=student[index].name??"null";
+                   ageController.text= student[index].age.toString();
+                   editIndex=index;
+                    }, icon: Icon(Icons.edit)),
+                IconButton(onPressed: ()async{
+                  await studentService.delete(index);
                 }, icon: Icon(Icons.delete,color: Colors.red,),
                 )
+                  ],
+              ),
               ),
             );
 
